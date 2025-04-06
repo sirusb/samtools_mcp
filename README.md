@@ -13,6 +13,28 @@ A Model Control Protocol implementation for SAMtools, providing a standardized i
 - Index FASTA files
 - And more...
 
+### Core Capabilities
+- **File Format Support**: Handle SAM (text), BAM (binary), and CRAM (compressed) alignment files
+- **Format Conversion**: Convert between SAM, BAM, and CRAM formats seamlessly
+- **Region-Specific Analysis**: Extract and analyze specific genomic regions
+- **Flag-Based Filtering**: Filter reads based on SAM flags
+- **Performance Optimization**: Multi-threaded operations for sorting and merging
+- **Statistical Analysis**: Generate comprehensive alignment statistics
+
+### Tools Overview
+
+| Tool | Description | Key Features |
+|------|-------------|--------------|
+| `view` | View and convert alignment files | - Format conversion (SAM/BAM/CRAM)<br>- Region filtering<br>- Flag-based filtering<br>- Header manipulation |
+| `sort` | Sort alignment files | - Coordinate-based sorting<br>- Name-based sorting<br>- Memory per thread control<br>- Multi-threading support |
+| `index` | Index BAM/CRAM files | - BAI index generation<br>- CSI index support<br>- CRAM index creation |
+| `merge` | Merge multiple BAM/CRAM files | - Multi-file merging<br>- Thread-enabled processing<br>- Header reconciliation |
+| `depth` | Calculate read depth | - Per-base depth calculation<br>- Region-specific analysis<br>- Multi-file support |
+| `flagstat` | Generate alignment statistics | - Comprehensive flag statistics<br>- Quality checks<br>- Paired-end metrics |
+| `idxstats` | BAM/CRAM index statistics | - Reference sequence stats<br>- Mapped/unmapped counts<br>- Length information |
+| `faidx` | Index FASTA files | - FASTA indexing<br>- Region extraction<br>- Sequence retrieval |
+
+
 ## Installation
 
 ### Using Docker (Recommended)
