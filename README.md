@@ -1,69 +1,142 @@
-# Samtools MCP
+# SAMtools MCP (Model Control Protocol)
 
-This is a Model Context Protocol (MCP) server for interacting with samtools, a suite of programs for working with high-throughput sequencing data.
+A Model Control Protocol implementation for SAMtools, providing a standardized interface for working with SAM/BAM/CRAM files.
+
+## Features
+
+- View and convert SAM/BAM/CRAM files
+- Sort alignment files
+- Index BAM/CRAM files
+- Generate statistics
+- Merge multiple BAM files
+- Calculate read depth
+- Index FASTA files
+- And more...
 
 ## Installation
 
-1. Make sure you have samtools installed and available in your PATH:
-   ```
-   which samtools
-   ```
+### Using Docker (Recommended)
 
-2. Install the MCP Python SDK:
-   ```
-   pip install mcp
-   ```
+The easiest way to use SAMtools MCP is through Docker:
+
+```bash
+# Pull the Docker image
+docker pull nadhir/samtools-mcp:latest
+
+# Run the container
+docker run -it --rm nadhir/samtools-mcp:latest
+
+# To process BAM files, mount a volume:
+docker run -it --rm -v /path/to/your/bam/files:/data nadhir/samtools-mcp:latest
+```
+
+### Local Installation
+
+1. Clone the repository:
+```bash
+git clone https://github.com/your-username/samtools_mcp.git
+cd samtools_mcp
+```
+
+2. Install dependencies:
+```bash
+pip install uv
+uv pip install -r requirements.txt
+```
+
+## Configuration
+
+### MCP Server Configuration
+
+To configure the MCP server to use the Docker image, add the following to your MCP configuration file:
+
+```json
+{
+  "servers": {
+    "samtools": {
+      "type": "docker",
+      "image": "nadhir/samtools-mcp:latest",
+      "volumes": [
+        {
+          "source": "/path/to/your/data",
+          "target": "/data"
+        }
+      ]
+    }
+  }
+}
+```
+
+### Local MCP Configuration
+
+To configure the MCP to run using `uv`, add the following to your `~/.cursor/mcp.json`:
+
+```json
+{
+  "samtools_mcp": {
+    "command": "uv",
+    "args": ["run", "--with", "fastmcp", "fastmcp", "run", "/path/to/samtools_mcp.py"]
+  }
+}
+```
+
+Replace `/path/to/samtools_mcp.py` with the actual path to your `samtools_mcp.py` file.
 
 ## Usage
 
-Run the server:
+### Basic Commands
 
-```
-python samtools_mcp.py
-```
+1. View BAM file:
+```python
+from samtools_mcp import SamtoolsMCP
 
-Or use the MCP CLI:
-
-```
-mcp run samtools_mcp.py
+mcp = SamtoolsMCP()
+result = mcp.view(input_file="/data/example.bam")
 ```
 
-## Available Tools
-
-The MCP server provides the following tools:
-
-- `samtools_view`: View and convert SAM/BAM/CRAM files
-- `samtools_sort`: Sort SAM/BAM/CRAM files
-- `samtools_index`: Index SAM/BAM/CRAM files
-- `samtools_flagstat`: Generate statistics on BAM/CRAM files
-- `samtools_idxstats`: Generate statistics from a BAM/CRAM index
-- `samtools_faidx`: Index FASTA files or extract sequences
-- `samtools_merge`: Merge multiple sorted BAM/CRAM files
-- `samtools_depth`: Calculate depth at each position
-- `samtools_list_files`: List BAM/SAM/CRAM files in a directory
-
-## Available Resources
-
-- `help://samtools`: General samtools help information
-- `help://samtools/{command}`: Help for a specific samtools command
-- `version://samtools`: Samtools version information
-
-## Available Prompts
-
-- `show_sam_file_prompt`: View a SAM/BAM/CRAM file with headers
-- `get_file_statistics_prompt`: Get statistics for a BAM/CRAM file
-- `index_and_sort_workflow_prompt`: Sort a BAM file and index it
-
-## Example Usage
-
-Using the MCP with Claude:
-
-```
-I have a BAM file called "sample.bam". Can you help me sort and index it?
+2. Sort BAM file:
+```python
+result = mcp.sort(input_file="/data/example.bam", output_file="/data/sorted.bam")
 ```
 
-Claude can then use the `index_and_sort_workflow_prompt` to guide you through the process.
+3. Index BAM file:
+```python
+result = mcp.index(input_file="/data/sorted.bam")
+```
+
+### Advanced Usage
+
+1. View specific region with flags:
+```python
+result = mcp.view(
+    input_file="/data/example.bam",
+    region="chr1:1000-2000",
+    flags_required="0x2",
+    output_format="SAM"
+)
+```
+
+2. Sort by read name:
+```python
+result = mcp.sort(
+    input_file="/data/example.bam",
+    output_file="/data/namesorted.bam",
+    sort_by_name=True
+)
+```
+
+3. Calculate depth with multiple input files:
+```python
+result = mcp.depth(
+    input_files=["/data/sample1.bam", "/data/sample2.bam"],
+    region="chr1:1-1000000"
+)
+```
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
 
 ## License
 
-MIT
+This project is licensed under the MIT License - see the LICENSE file for details.
