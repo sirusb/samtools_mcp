@@ -1,10 +1,13 @@
-# Python-generated files
+.DS_Store
+**/.DS_Store
 __pycache__/
-*.py[oc]
-build/
+*.pyc
+.pytest_cache/
+.coverage
+htmlcov/
 dist/
-wheels/
-*.egg-info
+build/
+*.egg-info/
 
-# Virtual environments
-.venv
+# Exclude bam directory
+bam/
