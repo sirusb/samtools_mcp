@@ -1,3 +1,5 @@
+[![MseeP.ai Security Assessment Badge](https://mseep.net/pr/sirusb-samtools-mcp-badge.png)](https://mseep.ai/app/sirusb-samtools-mcp)
+
 # SAMtools MCP (Model Control Protocol)
 
 A Model Control Protocol implementation for SAMtools, providing a standardized interface for working with SAM/BAM/CRAM files.
